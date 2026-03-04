@@ -6,11 +6,10 @@ public class PunchHitbox : MonoBehaviour
     public int damage = 1;
 
     private readonly HashSet<GameObject> hitThisPunch = new HashSet<GameObject>();
- 
+
     public void BeginPunchDamage()
     {
         hitThisPunch.Clear();
-
         var col = GetComponent<Collider2D>();
         if (col != null) col.enabled = true;
     }
@@ -19,21 +18,35 @@ public class PunchHitbox : MonoBehaviour
     {
         var col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
-
         hitThisPunch.Clear();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("enemy")) return;
+        var hitObj = other.gameObject;
 
-        var enemyObj = other.gameObject;
-        if (hitThisPunch.Contains(enemyObj)) return;
+        if (hitThisPunch.Contains(hitObj)) return;
+        hitThisPunch.Add(hitObj);
 
-        hitThisPunch.Add(enemyObj);
+        if (other.CompareTag("enemy"))
+        {
+            var hp = hitObj.GetComponent<EnemyHealth>();
+            if (hp != null) hp.TakeDamage(damage);
+            return;
+        }
 
-        var hp = enemyObj.GetComponent<EnemyHealth>();
-        if (hp != null)
-            hp.TakeDamage(damage);
+
+        if (other.CompareTag("Player") || other.CompareTag("Player2"))
+        {
+            var myRoot = transform.root.gameObject;
+
+
+            if (hitObj == myRoot) return;
+
+            var stamina = hitObj.GetComponent<PlayerStamina>();
+            if (stamina != null) stamina.ReceiveDamageStamina();
+
+
+        }
     }
 }

@@ -1,15 +1,15 @@
 {
     "version": 1,
-    "name": "Controls",
+    "name": "Controls P2",
     "maps": [
         {
-            "name": "Player1",
-            "id": "e7d3d2f0-53cd-4000-aae1-9a381d41d36d",
+            "name": "Player2",
+            "id": "cff3cfbe-f4a7-4274-b993-abadb04db00a",
             "actions": [
                 {
                     "name": "Move",
                     "type": "Value",
-                    "id": "3b2b70d5-6802-4a34-84f7-a6b4909e821c",
+                    "id": "5be45c08-39f1-42bb-b4c6-dbf6b79a31d5",
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
@@ -18,7 +18,7 @@
                 {
                     "name": "Jump",
                     "type": "Button",
-                    "id": "997935c6-744d-4a3a-ae09-30e7ac5f4fef",
+                    "id": "32eabd0c-01e7-4129-969e-0e2f202a6737",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -27,7 +27,7 @@
                 {
                     "name": "Dash",
                     "type": "Button",
-                    "id": "b197bff3-537d-4c1e-9a30-8da45f603089",
+                    "id": "279e04f5-96c6-45a3-85a9-62112a539180",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -36,7 +36,7 @@
                 {
                     "name": "Punch",
                     "type": "Button",
-                    "id": "f2acc266-8e5b-4e8d-a59c-85ffba35a46d",
+                    "id": "a09e1d90-7d2c-4db9-b17f-c5348fcf5d4d",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -46,7 +46,7 @@
             "bindings": [
                 {
                     "name": "1D Axis",
-                    "id": "a0dd793e-3aaf-4202-b781-e82d43effd0a",
+                    "id": "ea1071ea-9110-43eb-985d-4d21748ccdab",
                     "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
@@ -56,9 +56,9 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "negative",
-                    "id": "a30e156b-6013-4b08-8700-49d66afa5ed8",
-                    "path": "<Keyboard>/a",
+                    "name": "Positive",
+                    "id": "4217d4cf-1600-45de-9d03-1f021ee3db52",
+                    "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -67,9 +67,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "positive",
-                    "id": "e1ddcd12-a7b4-4cb8-80b6-32946668efbe",
-                    "path": "<Keyboard>/d",
+                    "name": "Negative",
+                    "id": "ce1632e1-6249-4ee2-826c-bd4aa672102b",
+                    "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -79,8 +79,8 @@
                 },
                 {
                     "name": "",
-                    "id": "41c1a926-2ac8-462a-9282-a34fba0561b2",
-                    "path": "<Keyboard>/w",
+                    "id": "7e046974-7d46-439b-bf47-6a83226fd749",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -90,8 +90,8 @@
                 },
                 {
                     "name": "",
-                    "id": "d19e6646-1199-40b4-82cd-7c7816fdca60",
-                    "path": "<Keyboard>/s",
+                    "id": "bbcd541a-4022-4ee6-b0f5-e55ab72f1972",
+                    "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -101,8 +101,8 @@
                 },
                 {
                     "name": "",
-                    "id": "aa512107-cfeb-4755-a2b1-530de0a0db00",
-                    "path": "<Keyboard>/g",
+                    "id": "a3cc3615-4742-4feb-b04c-0afaccb85e43",
+                    "path": "<Keyboard>/k",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

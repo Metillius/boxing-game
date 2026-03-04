@@ -5,26 +5,32 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
-
+    
+    public bool startFacingLeft = false; // yön ayarı
+    
     [Header("Punch Settings")]
     public Animator handRAnimator;
     public Animator handLAnimator;
     public string punchTriggerName = "Punch";
-    public float punchCooldown = 0.08f;
-    private float nextPunchTime = 0f;
-    private bool nextIsRight = true; 
-    private float lastPunchTime = 0f;
-    public float comboResetTime = 0.9f;
+    public float punchCooldown    = 0.08f;
+    public float comboResetTime   = 0.9f;
 
+    private float nextPunchTime = 0f;
+    private bool  nextIsRight   = true;
+    private float lastPunchTime = 0f;
+
+
+    private PlayerStamina _stamina;
 
     private Rigidbody2D rb;
     private float moveDirection = 0f;
-    private bool isGrounded = false;
-    private bool jumpRequested = false;
+    private bool  isGrounded    = false;
+    private bool  jumpRequested = false;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb       = GetComponent<Rigidbody2D>();
+        _stamina = GetComponent<PlayerStamina>(); 
     }
 
     void OnMove(InputValue value)
@@ -34,31 +40,25 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        Debug.Log("JUMP INPUT RECEIVED — isGrounded: " + isGrounded);
-        if (isGrounded)
-        {
-            jumpRequested = true;
-            Debug.Log("JUMP EXECUTED");
-        }
+        if (!isGrounded) return;
+
+        jumpRequested = true;
+        _stamina?.UseJumpStamina();
     }
 
     void OnPunch()
     {
-        Debug.Log("PUNCH INPUT GELDİ");
-
         if (Time.time < nextPunchTime) return;
         nextPunchTime = Time.time + punchCooldown;
 
-        // combo reset 
         if (Time.time - lastPunchTime > comboResetTime)
-        {
             nextIsRight = true;
-        }
 
         bool rightPunch = nextIsRight;
-        nextIsRight = !nextIsRight;
+        nextIsRight     = !nextIsRight;
+        lastPunchTime   = Time.time;
 
-        lastPunchTime = Time.time;
+        _stamina?.UsePunchStamina(); 
 
         if (rightPunch && handRAnimator != null)
         {
@@ -77,27 +77,26 @@ public class PlayerController : MonoBehaviour
         if (jumpRequested)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            isGrounded = false;
+            isGrounded    = false;
             jumpRequested = false;
         }
 
-        rb.linearVelocity = new Vector2(moveDirection * moveSpeed, rb.linearVelocity.y);
+        float dir = startFacingLeft ? -moveDirection : moveDirection;
+        rb.linearVelocity = new Vector2(dir * moveSpeed, rb.linearVelocity.y);
 
         if (moveDirection < 0)
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            transform.rotation = Quaternion.Euler(0f, startFacingLeft ? 0f : 180f, 0f);
         else if (moveDirection > 0)
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            transform.rotation = Quaternion.Euler(0f, startFacingLeft ? 180f : 0f, 0f);
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Ground"))
-            isGrounded = true;
+        if (col.gameObject.CompareTag("Ground")) isGrounded = true;
     }
 
     void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Ground"))
-            isGrounded = false;
+        if (col.gameObject.CompareTag("Ground")) isGrounded = false;
     }
 }
