@@ -32,8 +32,8 @@ public class PlayerStamina : MonoBehaviour
 
 
 
-    private float _currentStamina;      
-    private float _currentMaxStamina;   
+    public float _currentStamina;      
+    public float _currentMaxStamina;   
     public float CurrentStamina    => _currentStamina;
     public float CurrentMaxStamina => _currentMaxStamina;
 
@@ -50,6 +50,12 @@ public class PlayerStamina : MonoBehaviour
         // stamina regen
         _currentStamina += staminaRegenPerSecond * Time.deltaTime;
         _currentStamina = Mathf.Clamp(_currentStamina, 0f, _currentMaxStamina);
+
+        if (_currentStamina <= 0)
+        {
+            GameManager.Instance.PlayerDied(gameObject.tag);
+            Destroy(gameObject);
+        }
 
         RefreshUI();
     }
