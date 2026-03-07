@@ -7,6 +7,10 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;
     
     public bool startFacingLeft = false; // yön ayarı
+
+    [Header("Stamina Punch Penalty")]
+    public float lowStaminaThreshold = 0.3f;  
+    public float lowStaminaCooldownMultiplier = 3f; 
     
     [Header("Punch Settings")]
     public Animator handRAnimator;
@@ -19,8 +23,9 @@ public class PlayerController : MonoBehaviour
     private bool  nextIsRight   = true;
     private float lastPunchTime = 0f;
 
-
     private PlayerStamina _stamina;
+    private PlayerBlock _block;
+
 
     private Rigidbody2D rb;
     private float moveDirection = 0f;
@@ -31,6 +36,8 @@ public class PlayerController : MonoBehaviour
     {
         rb       = GetComponent<Rigidbody2D>();
         _stamina = GetComponent<PlayerStamina>(); 
+        _block   = GetComponent<PlayerBlock>(); 
+
     }
 
     void OnMove(InputValue value)
@@ -45,11 +52,19 @@ public class PlayerController : MonoBehaviour
         jumpRequested = true;
         _stamina?.UseJumpStamina();
     }
-
+    void OnBlock(InputValue value)
+    {
+        _block?.SetBlocking(value.Get<float>() > 0.5f);
+    }
     void OnPunch()
     {
         if (Time.time < nextPunchTime) return;
-        nextPunchTime = Time.time + punchCooldown;
+        if (_stamina != null && _stamina.StaminaPercent < 0.08f) return; // %8 altında vurma
+
+        float cooldown = (_stamina != null && _stamina.StaminaPercent < lowStaminaThreshold)
+            ? punchCooldown * lowStaminaCooldownMultiplier
+            : punchCooldown;
+        nextPunchTime = Time.time + cooldown;
 
         if (Time.time - lastPunchTime > comboResetTime)
             nextIsRight = true;
@@ -58,7 +73,7 @@ public class PlayerController : MonoBehaviour
         nextIsRight     = !nextIsRight;
         lastPunchTime   = Time.time;
 
-        _stamina?.UsePunchStamina(); 
+        _stamina?.UsePunchStamina();
 
         if (rightPunch && handRAnimator != null)
         {
@@ -67,7 +82,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (handLAnimator != null)
         {
-            handLAnimator.ResetTrigger(punchTriggerName);
+            handRAnimator.ResetTrigger(punchTriggerName);
             handLAnimator.SetTrigger(punchTriggerName);
         }
     }

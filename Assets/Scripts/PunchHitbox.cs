@@ -39,14 +39,24 @@ public class PunchHitbox : MonoBehaviour
         if (other.CompareTag("Player") || other.CompareTag("Player2"))
         {
             var myRoot = transform.root.gameObject;
-
-
             if (hitObj == myRoot) return;
+
+            var block = hitObj.GetComponent<PlayerBlock>();
+
+            if (block != null && block.IsBlocking)
+            {
+                var toAttacker = myRoot.transform.position - hitObj.transform.position;
+                var facing = hitObj.transform.right;
+
+                if (Vector2.Dot(toAttacker, facing) > 0)
+                {
+                    block.AbsorbHit(damage * 5f);
+                    return;
+                }
+            }
 
             var stamina = hitObj.GetComponent<PlayerStamina>();
             if (stamina != null) stamina.ReceiveDamageStamina();
-
-
         }
     }
 }

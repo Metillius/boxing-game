@@ -10,18 +10,20 @@ public class PlayerStamina : MonoBehaviour
     [Header("Stamina Settings")]
     [Tooltip("Oyun başındaki maksimum stamina (tüm zamanların tavanı)")]
     public float maxStamina = 100f;
+    public float StaminaPercent => _currentStamina / maxStamina;
+
 
     [Tooltip("Max stamina'nın düşebileceği en alt sınır")]
     public float minMaxStamina = 10f;
 
     [Tooltip("Saniyede ne kadar stamina yenilensin")]
-    public float staminaRegenPerSecond = 10f;
+    public float staminaRegenPerSecond = 2f;
 
     [Header("Stamina Costs")]
-    public float punchCost = 2f;
+    public float punchCost = 3f;
     public float jumpCost = 6f;
     public float damageStaminaCost = 10f;      
-    public float damageMaxStaminaReduction = 6f; 
+    public float damageMaxStaminaReduction = 4f; 
 
     [Header("UI References")]
     [Tooltip("Sarı bar Image bileşeni — current stamina'yı gösterir")]
@@ -47,16 +49,14 @@ public class PlayerStamina : MonoBehaviour
 
     void Update()
     {
-        // stamina regen
-        _currentStamina += staminaRegenPerSecond * Time.deltaTime;
-        _currentStamina = Mathf.Clamp(_currentStamina, 0f, _currentMaxStamina);
-
         if (_currentStamina <= 0)
         {
             GameManager.Instance.PlayerDied(gameObject.tag);
             Destroy(gameObject);
         }
-
+        // stamina regen
+        _currentStamina += staminaRegenPerSecond * Time.deltaTime;
+        _currentStamina = Mathf.Clamp(_currentStamina, 0f, _currentMaxStamina);
         RefreshUI();
     }
 
