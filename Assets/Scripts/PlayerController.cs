@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private float moveDirection = 0f;
     private bool  isGrounded    = false;
     private bool  jumpRequested = false;
+    private int _groundContactCount = 0;
 
     void Awake()
     {
@@ -47,7 +48,7 @@ public class PlayerController : MonoBehaviour
 
     void OnJump()
     {
-        if (!isGrounded) return;
+        if (_groundContactCount <= 0) return;
 
         jumpRequested = true;
         _stamina?.UseJumpStamina();
@@ -92,7 +93,6 @@ public class PlayerController : MonoBehaviour
         if (jumpRequested)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            isGrounded    = false;
             jumpRequested = false;
         }
 
@@ -107,11 +107,15 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Ground")) isGrounded = true;
+        Debug.Log("ENTER: " + col.gameObject.name + " tag: " + col.gameObject.tag);
+
+        if (col.gameObject.CompareTag("Ground")) _groundContactCount++;
     }
 
     void OnCollisionExit2D(Collision2D col)
     {
-        if (col.gameObject.CompareTag("Ground")) isGrounded = false;
+        Debug.Log("EXIT: " + col.gameObject.name + " tag: " + col.gameObject.tag);
+
+        if (col.gameObject.CompareTag("Ground")) _groundContactCount--;
     }
 }

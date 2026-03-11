@@ -17,8 +17,7 @@ public class PlayerStaminaTests
         stamina.damageStaminaCost = 10f;
         stamina.damageMaxStaminaReduction = 6f;
         stamina._currentStamina = 100f;
-        stamina._currentMaxStamina = 100f;
-        
+        stamina._currentMaxStamina = 100f;        
     }
 
     [Test]
